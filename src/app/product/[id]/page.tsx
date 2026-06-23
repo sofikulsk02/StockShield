@@ -140,8 +140,8 @@ export default function ProductDetailPage({ params }: PageProps) {
           <div className="relative w-full h-[400px] rounded-2xl overflow-hidden bg-zinc-950 flex items-center justify-center border border-white/5 shadow-2xl">
             {product.imageUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img 
-                src={product.imageUrl} 
+              <img
+                src={product.imageUrl}
                 alt={product.name}
                 className="w-full h-full object-cover"
               />
@@ -156,7 +156,7 @@ export default function ProductDetailPage({ params }: PageProps) {
           <div className="glass-card rounded-2xl p-6 space-y-4">
             <h1 className="text-2xl md:text-3xl font-extrabold text-white">{product.name}</h1>
             <p className="text-zinc-400 text-sm leading-relaxed">{product.description || "No description provided."}</p>
-            
+
             <div className="border-t border-white/5 pt-4">
               <span className="text-xs font-bold text-zinc-500 uppercase tracking-wider block mb-3">Warehouse Stock Distribution</span>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -168,7 +168,7 @@ export default function ProductDetailPage({ params }: PageProps) {
                         {inv.warehouse.name}
                       </span>
                       <span className="text-[10px] text-zinc-500 block">{inv.warehouse.location}</span>
-                      
+
                       <div className="flex items-end justify-between pt-2">
                         <div className="text-2xl font-bold text-white">
                           {available} <span className="text-xs text-zinc-500 font-medium">available</span>
@@ -239,40 +239,47 @@ export default function ProductDetailPage({ params }: PageProps) {
                 />
               </div>
 
-              {/* Idempotency Config */}
-              <div className="bg-white/2 border border-white/5 p-4 rounded-xl space-y-2">
-                <div className="flex justify-between items-center">
-                  <label className="block text-xs font-bold text-indigo-400 uppercase tracking-wider">
-                    Idempotency-Key
-                  </label>
-                  <button
-                    type="button"
-                    onClick={() => setIdempotencyKey(`idem-${Math.random().toString(36).substring(2, 9)}`)}
-                    className="text-[10px] text-zinc-400 hover:text-white"
-                  >
-                    🔄 Regenerate
-                  </button>
+              {/* Idempotency Config — collapsed by default */}
+              <details className="group">
+                <summary className="flex items-center justify-between cursor-pointer list-none select-none py-2 px-3 rounded-xl bg-white/2 border border-white/5 hover:border-white/10 transition-colors">
+                  <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-1.5">
+                    <span className="text-zinc-600">⚙</span> Advanced Technical Details
+                  </span>
+                  <span className="text-zinc-600 text-xs transition-transform group-open:rotate-180">▾</span>
+                </summary>
+                <div className="mt-2 bg-white/2 border border-white/5 p-4 rounded-xl space-y-2">
+                  <div className="flex justify-between items-center">
+                    <label className="block text-[10px] font-bold text-indigo-400 uppercase tracking-wider">
+                      Idempotency-Key Header
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setIdempotencyKey(`idem-${Math.random().toString(36).substring(2, 9)}`)}
+                      className="text-[10px] text-zinc-400 hover:text-white transition-colors"
+                    >
+                      🔄 Regenerate
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    value={idempotencyKey}
+                    onChange={(e) => setIdempotencyKey(e.target.value)}
+                    className="w-full bg-zinc-950 border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-indigo-300 font-mono focus:outline-none focus:border-indigo-500"
+                  />
+                  <span className="text-[9px] text-zinc-500 block leading-tight">
+                    Sent as the <code className="text-indigo-400/70">Idempotency-Key</code> request header. Protects against accidental duplicate submissions — retrying with the same key safely returns the original reservation ID.
+                  </span>
                 </div>
-                <input
-                  type="text"
-                  value={idempotencyKey}
-                  onChange={(e) => setIdempotencyKey(e.target.value)}
-                  className="w-full bg-zinc-950 border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-indigo-300 font-mono focus:outline-none focus:border-indigo-500"
-                />
-                <span className="text-[9px] text-zinc-500 block leading-tight">
-                  Protects against accidental duplicate checkout button clicks. Retrying with the same key safely returns the identical reservation ID.
-                </span>
-              </div>
+              </details>
 
               {/* Submit */}
               <button
                 type="submit"
                 disabled={isSubmitting || !hasStock || !selectedInventoryId}
-                className={`w-full py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 ${
-                  hasStock && selectedInventoryId
+                className={`w-full py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 ${hasStock && selectedInventoryId
                     ? "btn-primary"
                     : "bg-zinc-800 text-zinc-500 border border-zinc-700/50 cursor-not-allowed"
-                }`}
+                  }`}
               >
                 {isSubmitting ? (
                   <span>⏳ Locking Units...</span>

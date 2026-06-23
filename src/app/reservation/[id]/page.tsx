@@ -335,28 +335,36 @@ export default function ReservationPage({ params }: PageProps) {
           />
         </div>
 
-        {/* Idempotent Check Panel */}
+        {/* Idempotency Key — collapsed by default */}
         {reservation.status === "PENDING" && (
-          <div className="bg-white/2 border border-white/5 p-4 rounded-2xl mb-6">
-            <div className="flex justify-between items-center mb-1.5">
-              <span className="text-xs font-bold text-indigo-400 uppercase tracking-wider">Purchase Idempotency Key</span>
-              <button 
-                onClick={() => setIdempotencyKey(`idem-conf-${Math.random().toString(36).substring(2, 9)}`)}
-                className="text-[10px] text-zinc-500 hover:text-white"
-              >
-                🔄 Refresh Key
-              </button>
+          <details className="group mb-6">
+            <summary className="flex items-center justify-between cursor-pointer list-none select-none py-2 px-3 rounded-xl bg-white/2 border border-white/5 hover:border-white/10 transition-colors">
+              <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-1.5">
+                <span className="text-zinc-600">⚙</span> Advanced Technical Details
+              </span>
+              <span className="text-zinc-600 text-xs transition-transform group-open:rotate-180">▾</span>
+            </summary>
+            <div className="mt-2 bg-white/2 border border-white/5 p-4 rounded-2xl space-y-2">
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider">Purchase Idempotency Key</span>
+                <button
+                  onClick={() => setIdempotencyKey(`idem-conf-${Math.random().toString(36).substring(2, 9)}`)}
+                  className="text-[10px] text-zinc-500 hover:text-white transition-colors"
+                >
+                  🔄 Refresh Key
+                </button>
+              </div>
+              <input
+                type="text"
+                value={idempotencyKey}
+                onChange={(e) => setIdempotencyKey(e.target.value)}
+                className="w-full bg-zinc-950 border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-indigo-300 font-mono focus:outline-none"
+              />
+              <p className="text-[9px] text-zinc-500">
+                Passed as the <code className="text-indigo-400/70">Idempotency-Key</code> header. Prevents double-processing if the checkout button is pressed multiple times concurrently.
+              </p>
             </div>
-            <input 
-              type="text" 
-              value={idempotencyKey}
-              onChange={(e) => setIdempotencyKey(e.target.value)}
-              className="w-full bg-zinc-950 border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-indigo-300 font-mono focus:outline-none"
-            />
-            <p className="text-[9px] text-zinc-500 mt-1">
-              Passed in the `Idempotency-Key` header. Prevents double-processing if the checkout button is pressed multiple times concurrently.
-            </p>
-          </div>
+          </details>
         )}
 
         {/* Action Buttons */}

@@ -208,31 +208,39 @@ export default function Home() {
                 />
               </div>
 
-              {/* Idempotency Key */}
-              <div className="bg-white/2 p-3.5 rounded-xl border border-white/5">
-                <div className="flex justify-between items-center mb-1.5">
-                  <label className="block text-xs font-bold text-indigo-400 uppercase tracking-wider">
-                    Idempotency-Key Header
-                  </label>
-                  <button
-                    type="button"
-                    onClick={() => setIdempotencyKey(`idem-${Math.random().toString(36).substring(2, 9)}`)}
-                    className="text-[10px] text-zinc-400 hover:text-white"
-                  >
-                    🔄 Regenerate
-                  </button>
+              {/* Idempotency Key — collapsed by default */}
+              <details className="group">
+                <summary className="flex items-center justify-between cursor-pointer list-none select-none py-2 px-3 rounded-xl bg-white/2 border border-white/5 hover:border-white/10 transition-colors">
+                  <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-1.5">
+                    <span className="text-zinc-600">⚙</span> Advanced Technical Details
+                  </span>
+                  <span className="text-zinc-600 text-xs transition-transform group-open:rotate-180">▾</span>
+                </summary>
+                <div className="mt-2 bg-white/2 p-3.5 rounded-xl border border-white/5 space-y-2">
+                  <div className="flex justify-between items-center">
+                    <label className="block text-[10px] font-bold text-indigo-400 uppercase tracking-wider">
+                      Idempotency-Key Header
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setIdempotencyKey(`idem-${Math.random().toString(36).substring(2, 9)}`)}
+                      className="text-[10px] text-zinc-400 hover:text-white transition-colors"
+                    >
+                      🔄 Regenerate
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    value={idempotencyKey}
+                    onChange={(e) => setIdempotencyKey(e.target.value)}
+                    className="w-full bg-zinc-950 border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-indigo-300 font-mono focus:outline-none focus:border-indigo-500"
+                    placeholder="Optional unique request key"
+                  />
+                  <span className="text-[9px] text-zinc-500 block leading-tight">
+                    Sent as the <code className="text-indigo-400/70">Idempotency-Key</code> request header. Ensures duplicate clicks don't double-reserve — retrying with the same key returns the original response.
+                  </span>
                 </div>
-                <input
-                  type="text"
-                  value={idempotencyKey}
-                  onChange={(e) => setIdempotencyKey(e.target.value)}
-                  className="w-full bg-zinc-950 border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-indigo-300 font-mono focus:outline-none focus:border-indigo-500"
-                  placeholder="Optional unique request key"
-                />
-                <span className="text-[9px] text-zinc-500 mt-1 block">
-                  Ensures duplicate clicks don't double-reserve. Retrying with the same key returns the original response.
-                </span>
-              </div>
+              </details>
 
               {/* Buttons */}
               <div className="flex gap-3 mt-6 pt-4 border-t border-white/5">
