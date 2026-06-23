@@ -6,7 +6,8 @@ export class ReservationRepository {
     inventoryId: string,
     quantity: number,
     expiresAt: Date,
-    tx: any
+    tx: any,
+    userId?: string | null
   ): Promise<Reservation> {
     return tx.reservation.create({
       data: {
@@ -14,6 +15,7 @@ export class ReservationRepository {
         quantity,
         expiresAt,
         status: "PENDING",
+        userId: userId || null,
       },
     });
   }

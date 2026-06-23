@@ -22,7 +22,8 @@ export class ReservationService {
   async createReservation(
     inventoryId: string,
     quantity: number,
-    idempotencyKey?: string
+    idempotencyKey?: string,
+    userId?: string | null
   ): Promise<any> {
     if (idempotencyKey) {
       const cached = await redisService.getIdempotencyRecord(idempotencyKey);
@@ -56,7 +57,7 @@ export class ReservationService {
         }
 
         const expiresAt = new Date(Date.now() + RESERVATION_EXPIRY_MINUTES * 60 * 1000);
-        return reservationRepository.createReservation(inventoryId, quantity, expiresAt, tx);
+        return reservationRepository.createReservation(inventoryId, quantity, expiresAt, tx, userId);
       });
 
       const response = {

@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
+import Providers from "@/components/Providers";
 
 const outfit = Outfit({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800"],
   variable: "--font-outfit",
   display: "swap",
+  adjustFontFallback: false,
 });
 
 export const metadata: Metadata = {
@@ -27,7 +29,8 @@ export default function RootLayout({
         className="min-h-full flex flex-col justify-between"
         style={{ fontFamily: "var(--font-outfit), sans-serif" }}
       >
-        <div>
+        <Providers>
+          <div>
           {/* Navigation Header */}
           <header className="sticky top-0 z-50 glass-panel border-b border-white/5 py-4 px-6 md:px-12 flex items-center justify-between">
             <a href="/" className="flex items-center gap-2 group">
@@ -51,6 +54,7 @@ export default function RootLayout({
             Concurrency Lock Protection Active.
           </p>
         </footer>
+        </Providers>
       </body>
     </html>
   );

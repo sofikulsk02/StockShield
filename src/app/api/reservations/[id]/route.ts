@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { reservationService } from "@/services/reservation.service";
 import { handleApiError } from "@/lib/api-helper";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/auth";
 
 export async function GET(
   request: NextRequest,
@@ -15,6 +17,18 @@ export async function GET(
         { status: 404 }
       );
     }
+
+    // If reservation is personal, check that the authenticated user owns it
+    if (reservation.userId) {
+      const session = await getServerSession(authOptions);
+      if (!session || session.user?.id !== reservation.userId) {
+        return NextResponse.json(
+          { error: "Unauthorized access to reservation", code: "UNAUTHORIZED" },
+          { status: 403 }
+        );
+      }
+    }
+
     return NextResponse.json(reservation);
   } catch (error) {
     return handleApiError(error);
