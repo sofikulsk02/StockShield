@@ -1,21 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { CreateReservationSchema } from "@/schemas";
 import { reservationService } from "@/services/reservation.service";
 import { handleApiError } from "@/lib/api-helper";
 
-export async function POST(request: NextRequest) {
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
-    const body = await request.json();
-    const validated = CreateReservationSchema.parse(body);
-
+    const { id } = await params;
     const idempotencyKey = request.headers.get("idempotency-key") || undefined;
 
-    const result = await reservationService.createReservation(
-      validated.inventoryId,
-      validated.quantity,
-      idempotencyKey
-    );
-
+    const result = await reservationService.confirmReservation(id, idempotencyKey);
     return NextResponse.json(result.body, { status: result.statusCode });
   } catch (error) {
     return handleApiError(error);

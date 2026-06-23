@@ -1,0 +1,2 @@
+export const RESERVATION_EXPIRY_MINUTES = 10;
+export const IDEMPOTENCY_TTL_SECONDS = 86400; // 24 hours
