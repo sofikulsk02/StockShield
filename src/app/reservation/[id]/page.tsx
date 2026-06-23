@@ -2,6 +2,7 @@
 
 import { useEffect, useState, use } from "react";
 import Link from "next/link";
+import Script from "next/script";
 import { ReservationWithDetails } from "../../../types";
 import TimerCountDown from "../../../components/TimerCountDown";
 import ReservationAction from "../../../components/ReservationAction";
@@ -86,19 +87,16 @@ export default function ReservationPage({ params }: PageProps) {
       setIsSubmitting(true);
       setActionError(null);
 
-      const res = await fetch(`/api/reservations/${id}/confirm`, {
+      // 1. Create Razorpay order on the server
+      const orderRes = await fetch("/payments/order", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Idempotency-Key": idempotencyKey,
-        },
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reservationId: id }),
       });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        if (res.status === 410) {
-          // Expiry
+      const orderData = await orderRes.json();
+      if (!orderRes.ok) {
+        if (orderRes.status === 410) {
           setIsExpired(true);
           setReservation((prev) => {
             if (!prev) return null;
@@ -106,17 +104,77 @@ export default function ReservationPage({ params }: PageProps) {
           });
           throw new Error("Gone (410): The reservation has expired. The stock hold was automatically released.");
         }
-        throw new Error(data.error || `Failed to confirm purchase: ${res.status}`);
+        throw new Error(orderData.error || "Failed to create payment order");
       }
 
-      // Update state locally
-      setReservation((prev) => {
-        if (!prev) return null;
-        return { ...prev, status: "CONFIRMED" };
-      });
+      // 2. Configure options for the Razorpay Checkout modal
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_API_KEY || "rzp_test_T50DHxzuyI6JxM",
+        amount: orderData.amount * 100, // in paise
+        currency: orderData.currency,
+        name: "StockShield 🛡️",
+        description: `Confirm Purchase - ${orderData.productName} (x${orderData.quantity})`,
+        order_id: orderData.orderId,
+        handler: async function (response: any) {
+          try {
+            setIsSubmitting(true);
+            // 3. Verify payment signature on the server
+            const verifyRes = await fetch("/payments/verify", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                reservationId: id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature,
+              }),
+            });
+
+            const verifyData = await verifyRes.json();
+            if (!verifyRes.ok) {
+              if (verifyRes.status === 410) {
+                // Expiry during checkout modal flow
+                setIsExpired(true);
+                setReservation((prev) => {
+                  if (!prev) return null;
+                  return { ...prev, status: "RELEASED", releaseReason: "EXPIRED" };
+                });
+                throw new Error("Gone (410): The reservation expired during payment. The stock hold has been released.");
+              }
+              throw new Error(verifyData.error || "Payment verification failed");
+            }
+
+            // Success! Update local reservation state
+            setReservation((prev) => {
+              if (!prev) return null;
+              return { ...prev, status: "CONFIRMED" };
+            });
+          } catch (err: any) {
+            setActionError(err.message);
+          } finally {
+            setIsSubmitting(false);
+          }
+        },
+        prefill: {
+          name: "Test Shopper",
+          email: "shopper@stockshield.com",
+          contact: "9999999999",
+        },
+        theme: {
+          color: "#6366f1", // Indigo theme color
+        },
+        modal: {
+          ondismiss: function () {
+            setIsSubmitting(false);
+            console.log("Payment checkout dismissed");
+          },
+        },
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
     } catch (err: any) {
       setActionError(err.message);
-    } finally {
       setIsSubmitting(false);
     }
   };
@@ -181,6 +239,7 @@ export default function ReservationPage({ params }: PageProps) {
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
       {/* Navigation */}
       <div>
         <Link href="/" className="text-zinc-400 hover:text-white transition-colors text-sm font-medium">
