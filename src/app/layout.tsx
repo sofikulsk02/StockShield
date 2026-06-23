@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
+import NavBar from "@/components/NavBar";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -34,21 +35,7 @@ export default function RootLayout({
                 StockShield 🛡️
               </span>
             </a>
-            <nav className="flex items-center gap-6">
-              <a
-                href="/"
-                className="text-sm font-medium text-zinc-400 hover:text-white transition-colors"
-              >
-                Products
-              </a>
-              <a
-                href="/api/health"
-                target="_blank"
-                className="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/25 transition-colors font-medium"
-              >
-                API Status: Active
-              </a>
-            </nav>
+            <NavBar />
           </header>
 
           {/* Main Content Area */}

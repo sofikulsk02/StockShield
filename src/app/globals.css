@@ -130,3 +130,24 @@ body {
   0% { transform: scale(0.85); opacity: 0.5; }
   100% { transform: scale(2.2); opacity: 0; }
 }
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Active navbar link */
+.nav-active {
+  color: white !important;
+  position: relative;
+}
+.nav-active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  border-radius: 1px;
+  background: linear-gradient(90deg, #6366f1, #d946ef);
+}
