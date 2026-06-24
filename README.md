@@ -2,8 +2,8 @@
 An active inventory reservation platform that holds stock at checkout, confirms holds on payment, and auto-releases holds on expiration or cancellations. Built to handle massive concurrent traffic with absolute data consistency.
 
 ## Live Demo
-* **StockShield Live Deployment**: [StockShield Live](https://github.com/sofikulsk02/StockShield) *(Update with your live deployment URL)*
-* **StockShield End-to-End Demo Video**: *(Coming soon)*
+* **StockShield Live Deployment**: [StockShield Live](https://stock-shields.vercel.app/)
+* **StockShield End-to-End Demo Video**:[StockShield Live](https://drive.google.com/file/d/1Cbd7G87pMUow5tBTRY8QxFXHm02tious/view?usp=sharing)
 
 The platform is pre-loaded with seed data. You can test the end-to-end checkout reservation flow, view the real-time activity ledger, and run the concurrency demo to see the atomic UPDATE guarantee in action.
 
