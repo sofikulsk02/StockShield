@@ -49,14 +49,6 @@ export default function NavBar() {
         );
       })}
 
-      <a
-        href="/api/health"
-        target="_blank"
-        className="hidden md:inline-flex text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/25 transition-colors font-medium"
-      >
-        API Status: Active
-      </a>
-
       {/* User Session status */}
       {status === "loading" ? (
         <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse border border-white/10" />

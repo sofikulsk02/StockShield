@@ -34,7 +34,7 @@ export default function RootLayout({
           {/* Navigation Header */}
           <header className="sticky top-0 z-50 glass-panel border-b border-white/5 py-4 px-6 md:px-12 flex items-center justify-between">
             <a href="/" className="flex items-center gap-2 group">
-              <span className="text-xl md:text-2xl font-bold bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent group-hover:opacity-90 transition-opacity">
+              <span className="text-xl md:text-2xl font-bold text-orange-500 group-hover:text-orange-400 transition-colors">
                 StockShield 🛡️
               </span>
             </a>
@@ -48,11 +48,19 @@ export default function RootLayout({
         </div>
 
         {/* Footer */}
-        <footer className="w-full py-6 mt-12 border-t border-white/5 text-center text-xs text-zinc-500">
+        <footer className="w-full py-6 mt-12 border-t border-white/5 text-center text-xs text-zinc-500 flex flex-col items-center gap-3">
           <p>
             © {new Date().getFullYear()} StockShield Inc. — Real-Time
             Concurrency Lock Protection Active.
           </p>
+          <a
+            href="/api/health"
+            target="_blank"
+            className="inline-flex items-center gap-1.5 text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/25 transition-colors font-medium"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            API Status: Active
+          </a>
         </footer>
         </Providers>
       </body>

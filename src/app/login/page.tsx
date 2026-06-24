@@ -51,7 +51,7 @@ export default function LoginPage() {
             <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-zinc-950 animate-pulse" />
           </div>
           
-          <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent sm:text-4xl">
+          <h1 className="text-3xl font-extrabold tracking-tight text-orange-500 sm:text-4xl">
             StockShield 🛡️
           </h1>
           <p className="mt-3 text-sm text-zinc-400 font-medium">

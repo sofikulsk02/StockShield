@@ -29,7 +29,7 @@ export default function WarehouseInventory({ inventory }: WarehouseInventoryProp
         </span>
         <div className="flex items-center gap-2">
           <span className="text-zinc-500">Avail:</span>
-          <span className={`font-bold ${available > 0 ? "text-indigo-400" : "text-zinc-500"}`}>
+          <span className={`font-bold ${available > 0 ? "text-orange-500/90" : "text-zinc-500"}`}>
             {available}
           </span>
           <span className="text-zinc-600">/</span>
@@ -41,12 +41,12 @@ export default function WarehouseInventory({ inventory }: WarehouseInventoryProp
       <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden flex">
         {inventory.reservedUnits > 0 && (
           <div 
-            className="h-full bg-amber-500 transition-all duration-300"
+            className="h-full bg-amber-600/80 transition-all duration-300"
             style={{ width: `${pctReserved}%` }}
           />
         )}
         <div 
-          className="h-full bg-indigo-500 transition-all duration-300"
+          className="h-full bg-orange-600/80 transition-all duration-300"
           style={{ width: `${100 - pctReserved}%` }}
         />
       </div>
