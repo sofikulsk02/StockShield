@@ -43,7 +43,7 @@ body {
 
 /* Custom button styles */
 .btn-primary {
-  background: #f97316;
+  background: #10b981;
   color: white;
   font-weight: 500;
   transition: all 0.2s ease;
@@ -52,7 +52,7 @@ body {
 }
 
 .btn-primary:hover {
-  background: #ea580c;
+  background: #059669;
   transform: scale(1.01);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }

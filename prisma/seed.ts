@@ -28,7 +28,7 @@ async function main() {
       description:
         "13-inch Apple laptop powered by the M3 chip with all-day battery life.",
       imageUrl:
-        "https://images.unsplash.com/photo-1517336714739-489689fd1ca8?w=800",
+        "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=800",
     },
     {
       name: "Lenovo ThinkPad X1 Carbon",
