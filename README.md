@@ -1,6 +1,18 @@
-# StockShield 🛡️ | Real-Time Inventory Reservation System
+# StockShield 🛡️
+An active inventory reservation platform that holds stock at checkout, confirms holds on payment, and auto-releases holds on expiration or cancellations. Built to handle massive concurrent traffic with absolute data consistency.
 
-StockShield is a production-grade, high-concurrency inventory reservation and order-fulfillment platform. Built to solve the race conditions that occur in checkout flows (such as 3DS delays, UPI authorization confirmation windows, or wallet redirects), StockShield guarantees that stock holds are safe from double-allocation while preventing permanent stock depletion from abandoned carts.
+## Live Demo
+* **StockShield Live Deployment**: [StockShield Live](https://github.com/sofikulsk02/StockShield) *(Update with your live deployment URL)*
+* **StockShield End-to-End Demo Video**: *(Coming soon)*
+
+The platform is pre-loaded with seed data. You can test the end-to-end checkout reservation flow, view the real-time activity ledger, and run the concurrency demo to see the atomic UPDATE guarantee in action.
+
+## The Problem
+In modern e-commerce systems, inventory management during high-traffic flash sales presents a classic concurrency challenge. When a customer initiates the checkout process, payment gateways typically take anywhere from 30 seconds to several minutes to process the transaction. If inventory is only decremented after payment succeeds, a high volume of concurrent shoppers can purchase the same remaining stock, leading to overselling (selling items you do not physically have), which ruins customer trust.
+
+Conversely, decrementing stock the moment an item is added to the cart is highly susceptible to phantom stockouts. Since cart abandonment rates average around 70-80%, blocking stock for idle carts causes items to appear "Out of Stock" to serious buyers when they are actually sitting abandoned in carts.
+
+StockShield solves this with temporary inventory holds. The moment a checkout starts, the system locks the requested quantity for exactly 10 minutes. If the payment succeeds, the hold is confirmed and stock is permanently reduced. If the hold expires or the customer cancels, the stock is immediately returned to the available pool.
 
 ---
 
